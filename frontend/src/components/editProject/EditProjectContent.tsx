@@ -204,6 +204,10 @@ export default function EditProjectContent({
     });
   };
 
+  const isOrgMember = userOrganizations.some(
+    (o) => o.id === project.project_parents?.parent_organization?.id
+  );
+
   return (
     <div ref={contentRef}>
       <div className={classes.block}>
@@ -255,7 +259,11 @@ export default function EditProjectContent({
                   "project_parents"
                 )
               }
-              options={userOrganizations}
+              disabled={!isOrgMember}
+              options={[
+                ...(isOrgMember ? [] : [project.project_parents?.parent_organization]),
+                ...userOrganizations,
+              ]}
               label={texts.created_by}
               className={classes.select}
               required
